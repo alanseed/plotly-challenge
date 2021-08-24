@@ -50,7 +50,22 @@ d3.json("../samples.json").then(function (thisData) {
 });
 
 function optionChanged(option) {
-  let metaData = JSON.stringify(metas[option],null,2);
-  console.log(metaData); 
-  d3.select("#sample-metadata").text(metaData);
+
+  // write out the meta data for this subject 
+  d3.selectAll("p").remove();
+  let idText = `ID: ${metas[option].id}`
+  d3.select("#sample-metadata").append("p").text(idText);
+  let ethText = `ethnicity: ${metas[option].ethnicity}`; 
+  d3.select("#sample-metadata").append("p").text(ethText);
+  let genText = `gender: ${metas[option].gender}`; 
+  d3.select("#sample-metadata").append("p").text(genText);
+  let ageText = `age: ${metas[option].age}`; 
+  d3.select("#sample-metadata").append("p").text(ageText);
+  let locText = `location: ${metas[option].location}`; 
+  d3.select("#sample-metadata").append("p").text(locText);
+  let bbtText = `bbtype: ${metas[option].bbtype}`; 
+  d3.select("#sample-metadata").append("p").text(bbtText);
+  let wfrText = `wfreq: ${metas[option].wfreq}`; 
+  d3.select("#sample-metadata").append("p").text(wfrText);
+
 }
