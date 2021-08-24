@@ -50,22 +50,61 @@ d3.json("../samples.json").then(function (thisData) {
 });
 
 function optionChanged(option) {
-
-  // write out the meta data for this subject 
+  // write out the meta data for this subject
   d3.selectAll("p").remove();
-  let idText = `ID: ${metas[option].id}`
+  let idText = `ID: ${metas[option].id}`;
   d3.select("#sample-metadata").append("p").text(idText);
-  let ethText = `ethnicity: ${metas[option].ethnicity}`; 
+  let ethText = `ethnicity: ${metas[option].ethnicity}`;
   d3.select("#sample-metadata").append("p").text(ethText);
-  let genText = `gender: ${metas[option].gender}`; 
+  let genText = `gender: ${metas[option].gender}`;
   d3.select("#sample-metadata").append("p").text(genText);
-  let ageText = `age: ${metas[option].age}`; 
+  let ageText = `age: ${metas[option].age}`;
   d3.select("#sample-metadata").append("p").text(ageText);
-  let locText = `location: ${metas[option].location}`; 
+  let locText = `location: ${metas[option].location}`;
   d3.select("#sample-metadata").append("p").text(locText);
-  let bbtText = `bbtype: ${metas[option].bbtype}`; 
+  let bbtText = `bbtype: ${metas[option].bbtype}`;
   d3.select("#sample-metadata").append("p").text(bbtText);
-  let wfrText = `wfreq: ${metas[option].wfreq}`; 
+  let wfrText = `wfreq: ${metas[option].wfreq}`;
   d3.select("#sample-metadata").append("p").text(wfrText);
 
+  // set up the bar graph
+ 
+  var data = [];
+  for (let i = 0; i < 10; i++) {
+    let record = {
+      x: subjects[option].sample_values[i],
+      y: `OTU ${subjects[option].otu_ids[i]}`,
+    };
+    data.push(record);
+  }
+  data.sort(function (a, b) {
+    return b.x - a.x;
+  });
+
+  let x = data.map((p) => p.x);
+  let otu = data.map((p) => p.y);
+  var layout = {
+    title:{
+      text:`Top 10 Bacteria Cultures found for ${metas[option].id}` 
+    },
+    yaxis: {
+      tickmode: "array",
+      tickvals: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+      ticktext: otu,
+    },
+    xaxis:{ 
+      title:"Sample count"
+    }
+  };
+  // set up the bar graph
+  var bar = [
+    {
+      type: "bar",
+      x: x,
+      y: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+      orientation: "h",
+    },
+  ];
+  Plotly.newPlot("bar", bar, layout);
+  
 }
