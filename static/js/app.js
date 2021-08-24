@@ -1,6 +1,6 @@
 // read in the data and make the plots
 d3.json("../samples.json").then(function (thisData) {
-  //console.log(JSON.stringify(thisData,null,2));  
+  // console.log(JSON.stringify(thisData,null,2));  
   
   // get the list of names
   let names = thisData.names;
@@ -19,8 +19,4 @@ d3.json("../samples.json").then(function (thisData) {
 
   // sort them in descending order 
   sum_values.sort(function(a,b){return b.sum_value - a.sum_value});
-
-  // make the drop down menu with the 10 largest number of samples 
-  
-  
 });
