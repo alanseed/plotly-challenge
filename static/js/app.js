@@ -126,19 +126,19 @@ function optionChanged(option) {
   });
 
   // TO DO - set up the color array 
-  
+
   // make the varrays for the charts
   sample_values = subjectData.map((p) => p.sample_values);
   otu_ids = subjectData.map((p) => p.otu_ids);
   otu_labels = subjectData.map((p) => p.otu_labels);
-  console.log(otu_ids); 
+ 
   // set up the bubble chart
   var trace2 = {
     mode: "markers",
     x: otu_ids,
     y: sample_values,
     marker: {
-      size: sample_values.map((p) => Math.log(p)*10),
+      size: sample_values.map((p) => 5 + Math.log(p)*10),
     },
     text: otu_labels,
   };
