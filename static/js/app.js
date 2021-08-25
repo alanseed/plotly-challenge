@@ -67,25 +67,24 @@ function optionChanged(option) {
   let wfrText = `wfreq: ${metas[option].wfreq}`;
   d3.select("#sample-metadata").append("p").text(wfrText);
 
-  // set up the bar graph
- 
+  // set up the top 10 samples for each id
   var data = [];
   for (let i = 0; i < 10; i++) {
     let record = {
-      x: subjects[option].sample_values[i],
-      y: `OTU ${subjects[option].otu_ids[i]}`,
-      labels:subjects[option].otu_labels[i]
+      sample_values: subjects[option].sample_values[i],
+      otu_ids: subjects[option].otu_ids[i],
+      otu_labels:subjects[option].otu_labels[i]
     };
     data.push(record);
   }
   data.sort(function (a, b) {
-    return b.x - a.x;
+    return b.sample_values - a.sample_values;
   });
 
-  let x = data.map((p) => p.x);
-  let otu = data.map((p) => p.y);
-  let labels = data.map((p) => p.labels);
-  console.log(x);
+  // make the varrays for the charts 
+  let sample_values = data.map((p) => p.sample_values);
+  let otu_ids = data.map((p) => p.otu_ids);
+  let otu_labels = data.map((p) => p.otu_labels);
   var layout = {
     title:{
       text:`Top 10 Bacteria Cultures found for ${metas[option].id}` 
@@ -93,7 +92,8 @@ function optionChanged(option) {
     yaxis: {
       tickmode: "array",
       tickvals: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-      ticktext: otu,
+      ticktext: otu_ids,
+      title:'OTU ID'
     },
     xaxis:{ 
       title:"Sample count"
@@ -103,12 +103,29 @@ function optionChanged(option) {
   var bar = [
     {
       type: "bar",
-      x: x,
+      x: sample_values,
       y: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
-      text: labels,
+      text: otu_labels,
       orientation: "h",
     },
   ];
   Plotly.newPlot("bar", bar, layout);
   
+  // get all the sample data for the test subject 
+
+  // set up the bubble chart 
+  var trace2 = {
+    mode: 'markers',
+    x: subjects[option].otu_ids,
+    y: subjects[option].sample_values,
+    marker: {size:subjects[option].sample_values.map((p)=>p/5)},
+    text:subjects[option].otu_labels
+  }; 
+  var bData = [trace2]; 
+  var bLayout = {
+    title:'Number of samples per OTU',
+    yaxis:{title:'Number of samples'},
+    xaxis:{title:'OTU ID'}
+  }; 
+  Plotly.newPlot("bubble", bData, bLayout); 
 }
