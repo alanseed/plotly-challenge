@@ -5,7 +5,7 @@ var numberSubjects = 5;
 var selectedSubject = 0;
 
 // read in the data and make the plots
-d3.json("../samples.json").then(function (thisData) {
+d3.json("https://alanseed.github.io/plotly-challenge/samples.json").then(function (thisData) {
   // console.log(JSON.stringify(thisData,null,2));
 
   // get the list of names
