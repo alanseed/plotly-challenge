@@ -74,6 +74,7 @@ function optionChanged(option) {
     let record = {
       x: subjects[option].sample_values[i],
       y: `OTU ${subjects[option].otu_ids[i]}`,
+      labels:subjects[option].otu_labels[i]
     };
     data.push(record);
   }
@@ -83,6 +84,8 @@ function optionChanged(option) {
 
   let x = data.map((p) => p.x);
   let otu = data.map((p) => p.y);
+  let labels = data.map((p) => p.labels);
+  console.log(x);
   var layout = {
     title:{
       text:`Top 10 Bacteria Cultures found for ${metas[option].id}` 
@@ -102,6 +105,7 @@ function optionChanged(option) {
       type: "bar",
       x: x,
       y: [10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+      text: labels,
       orientation: "h",
     },
   ];
