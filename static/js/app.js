@@ -112,6 +112,7 @@ function optionChanged(option) {
   Plotly.newPlot("bar", bar, layout);
 
   // sort the subject data on OTU id so that we can get the colours properly 
+  // turns out that this was not necessary, will remove if I have time 
   var subjectData = [];
   for (let i = 0; i < subjects[option].sample_values.length; i++) {
     let record = {
@@ -125,8 +126,6 @@ function optionChanged(option) {
     return a.otu_ids - b.otu_ids;
   });
 
-  // TO DO - set up the color array 
-
   // make the varrays for the charts
   sample_values = subjectData.map((p) => p.sample_values);
   otu_ids = subjectData.map((p) => p.otu_ids);
@@ -139,6 +138,7 @@ function optionChanged(option) {
     y: sample_values,
     marker: {
       size: sample_values.map((p) => 5 + Math.log(p)*10),
+      color:otu_ids
     },
     text: otu_labels,
   };
@@ -149,7 +149,19 @@ function optionChanged(option) {
     xaxis: { title: "OTU ID" },
   };
   Plotly.newPlot("bubble", bData, bLayout);
+
+  // make the gauge plot 
+  var trace3 = [
+  {
+    domain:{x:[0,1], y:[0,1]}, 
+    value:metas[option].wfreq, 
+    title:{text:"Belly Button Washing Per Week"},
+    type:"indicator",
+    mode:"gauge+number",
+    delta:{reference:5},
+    gauge:{axis:{range:[null,9]}}
+  }
+];
+var gLayout={width:600, height:400}; 
+Plotly.newPlot("gauge", trace3, gLayout ); 
 }
-
-
-
