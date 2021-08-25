@@ -111,10 +111,6 @@ function optionChanged(option) {
   ];
   Plotly.newPlot("bar", bar, layout);
 
-  // make the color array
-  let numberIds = subjects[option].otu_ids.length;
-  var colors = generateColor("#caf2f8", "#1b4f72", numberIds);
-
   // sort the subject data on OTU id so that we can get the colours properly 
   var subjectData = [];
   for (let i = 0; i < subjects[option].sample_values.length; i++) {
@@ -129,25 +125,26 @@ function optionChanged(option) {
     return a.otu_ids - b.otu_ids;
   });
 
+  // TO DO - set up the color array 
+  
   // make the varrays for the charts
   sample_values = subjectData.map((p) => p.sample_values);
   otu_ids = subjectData.map((p) => p.otu_ids);
   otu_labels = subjectData.map((p) => p.otu_labels);
-
+  console.log(otu_ids); 
   // set up the bubble chart
   var trace2 = {
     mode: "markers",
     x: otu_ids,
     y: sample_values,
     marker: {
-      size: sample_values.map((p) => p / 5),
-      color: colors,
+      size: sample_values.map((p) => Math.log(p)*10),
     },
     text: otu_labels,
   };
   var bData = [trace2];
   var bLayout = {
-    title: "Number of samples per OTU",
+    title: "Bacteria Cultures Per Sample",
     yaxis: { title: "Number of samples" },
     xaxis: { title: "OTU ID" },
   };
@@ -156,77 +153,3 @@ function optionChanged(option) {
 
 
 
-// found this code to make the colors for the bubble plot from 
-// https://stackoverflow.com/questions/3080421/javascript-color-gradient
-
-function hex(c) {
-  var s = "0123456789abcdef";
-  var i = parseInt(c);
-  if (i == 0 || isNaN(c)) return "00";
-  i = Math.round(Math.min(Math.max(0, i), 255));
-  return s.charAt((i - (i % 16)) / 16) + s.charAt(i % 16);
-}
-
-/* Convert an RGB triplet to a hex string */
-function convertToHex(rgb) {
-  return hex(rgb[0]) + hex(rgb[1]) + hex(rgb[2]);
-}
-
-/* Remove '#' in color hex string */
-function trim(s) {
-  return s.charAt(0) == "#" ? s.substring(1, 7) : s;
-}
-
-/* Convert a hex string to an RGB triplet */
-function convertToRGB(hex) {
-  var color = [];
-  color[0] = parseInt(trim(hex).substring(0, 2), 16);
-  color[1] = parseInt(trim(hex).substring(2, 4), 16);
-  color[2] = parseInt(trim(hex).substring(4, 6), 16);
-  return color;
-}
-
-function generateColor(colorStart, colorEnd, colorCount) {
-  // The beginning of your gradient
-  var start = convertToRGB(colorStart);
-
-  // The end of your gradient
-  var end = convertToRGB(colorEnd);
-
-  // The number of colors to compute
-  var len = colorCount;
-
-  //Alpha blending amount
-  var alpha = 0.0;
-
-  var saida = [];
-
-  for (i = 0; i < len; i++) {
-    var c = [];
-    alpha += 1.0 / len;
-
-    c[0] = start[0] * alpha + (1 - alpha) * end[0];
-    c[1] = start[1] * alpha + (1 - alpha) * end[1];
-    c[2] = start[2] * alpha + (1 - alpha) * end[2];
-
-    saida.push(convertToHex(c));
-  }
-
-  return saida;
-}
-
-// Exemplo de como usar
-
-//var tmp = generateColor("#000000", "#ff0ff0", 10);
-
-// for (cor in tmp) {
-//   $("#result_show").append(
-//     "<div style='padding:8px;color:#FFF;background-color:#" +
-//       tmp[cor] +
-//       "'>COLOR " +
-//       cor +
-//       "° - #" +
-//       tmp[cor] +
-//       "</div>"
-//   );
-// }
